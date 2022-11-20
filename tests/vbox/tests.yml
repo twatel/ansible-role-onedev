@@ -1,0 +1,9 @@
+- name: Tests ansible role execution
+  hosts: vbox
+  become: true
+  gather_facts: true
+
+  roles:
+    - ansible-role-onedev
+
+    
