@@ -18,12 +18,15 @@
     path: "/tmp/onedev-7.7.11"
   register: onedev_directory_exist
 
-- name: Unarchive a file that needs to be downloaded (added in 2.0)
+- name: Unarchive a file that needs to be downloaded
   ansible.builtin.unarchive:
     src: https://code.onedev.io/downloads/projects/160/builds/3112/artifacts/onedev-7.7.11.zip
     dest: /tmp
     remote_src: yes
   when: not onedev_directory_exist.stat.exists
+
+- name: Setup install.sh
+  include_tasks: _setup_bin_server.yml
 
 - name: Install & Start onedev service
   command: ./server.sh installstart

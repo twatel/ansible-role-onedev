@@ -32,9 +32,18 @@ env:
 	@echo "******************************** ENV REQUIREMENTS ******************************"
 
 	@[ -d "${PWD}/.direnv" ] || (echo "Venv not found: ${PWD}/.direnv" && exit 1)
-	@pip3 install -U pip wheel setuptools --no-cache-dir --quiet && \
-	echo "[  ${GREEN}OK${COLOR_OFF}  ] ${YELLOW}PIP + WHEEL + SETUPTOOLS${COLOR_OFF}" || \
-	echo "[${RED}FAILED${COLOR_OFF}] ${YELLOW}PIP + WHEEL + SETUPTOOLS${COLOR_OFF}"
+
+	@pip3 install -U pip --no-cache-dir --quiet &&\
+	echo "[  ${GREEN}OK${COLOR_OFF}  ] ${YELLOW}INSTALL${COLOR_OFF} pip3" || \
+	echo "[${RED}FAILED${COLOR_OFF}] ${YELLOW}INSTALL${COLOR_OFF} pip3"
+
+	@pip3 install -U wheel --no-cache-dir --quiet &&\
+	echo "[  ${GREEN}OK${COLOR_OFF}  ] ${YELLOW}INSTALL${COLOR_OFF} wheel" || \
+	echo "[${RED}FAILED${COLOR_OFF}] ${YELLOW}INSTALL${COLOR_OFF} wheel"
+
+	@pip3 install -U setuptools --no-cache-dir --quiet && \
+	echo "[  ${GREEN}OK${COLOR_OFF}  ] ${YELLOW}INSTALL${COLOR_OFF} setuptools" || \
+	echo "[${RED}FAILED${COLOR_OFF}] ${YELLOW}INSTALL${COLOR_OFF} setuptools"
 
 	@pip3 install -U --no-cache-dir -r "${PWD}/requirements.txt" --quiet && \
 	echo "[  ${GREEN}OK${COLOR_OFF}  ] ${YELLOW}PIP REQUIREMENTS${COLOR_OFF}" || \
