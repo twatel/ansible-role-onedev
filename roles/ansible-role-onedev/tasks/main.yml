@@ -25,8 +25,14 @@
     remote_src: yes
   when: not onedev_directory_exist.stat.exists
 
-- name: Setup install.sh
-  include_tasks: _setup_bin_server.yml
+- name: Set /bin/server.sh variables
+  ansible.builtin.lineinfile:
+    path: /tmp/onedev-7.7.11/bin/server.sh
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    mode: '755'
+  loop:
+    - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_bin_server_files_to_source }}"' }
 
 - name: Install & Start onedev service
   command: ./server.sh installstart
