@@ -81,7 +81,7 @@ onedev_bin_server_wait_after_startup: "0"
 # If set, wait for the wrapper to report that the daemon has started
 onedev_bin_server_wait_for_started_status: "true"
 
-# to replace
+# Time to wait before sending timeout error
 onedev_bin_server_wait_for_started_timeout: "120"
 
 # If set, the status, start_msg and stop_msg commands will print out detailed

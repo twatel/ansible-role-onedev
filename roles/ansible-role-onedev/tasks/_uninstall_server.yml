@@ -1,0 +1,32 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Load one dev configuration variables into temporary file
+  template:
+    src: "sh_server_vars.j2"
+    dest: "{{ onedev_installation_directory }}/onedev_vars"
+    mode: 750
+
+- name: Set server.sh variables
+  ansible.builtin.lineinfile:
+    path: "{{ onedev_installation_directory }}/bin/server.sh"
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    mode: '755'
+  loop:
+    - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
+
+- name: Stop onedev service
+  command: ./server.sh stop
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+
+- name: Remove onedev service
+  command: ./server.sh remove
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+
+- name: Remove onedev installation directory
+  file:
+    path: "{{ onedev_installation_directory }}"
+    state: absent
+

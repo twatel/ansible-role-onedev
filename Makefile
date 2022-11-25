@@ -66,10 +66,15 @@ header:
 ##
 ## —————————————— ANSIBLE TESTS ———————————————————————————————————————————————————
 ##
-.PHONY: tests-vbox
-tests-vbox: header
+.PHONY: tests-vbox-install
+tests-vbox-install: header
 	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
-	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml
+	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml --tags "onedev_install"
+
+.PHONY: tests-vbox-uninstall
+tests-vbox-uninstall: header
+	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
+	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml --tags "onedev_uninstall"
 
 ##
 ## —————————————— CLEAN ENVIRONMENT ———————————————————————————————————————————————
