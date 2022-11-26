@@ -98,4 +98,5 @@ clean: header
 	@ 	if test -d $(TEST_VIRTUALBOX_DIRECTORY)/secrets; \
 			then rm -rf $(TEST_VIRTUALBOX_DIRECTORY)/secrets; \
 		fi
-
+	rm -rf .direnv
+	
