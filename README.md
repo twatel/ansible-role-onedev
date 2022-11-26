@@ -4,7 +4,7 @@ This role has goal to install & configure onedev bare-metal server
 
 what the role permit ?  
 - Install one-dev server  
-- Uninstall one-deve server  
+- Uninstall one-dev server  
 
 ## Variables
 
@@ -35,3 +35,23 @@ what the role permit ?
 * ``onedev_bin_server_plist_domain``: when installing on Mac OSX platforms, the following domain will be used to prefix the plist file name
 * ``onedev_bin_server_macosx_keep_running``: When installing on Mac OSX platforms, this parameter controls whether the daemon is to be kept continuously running
 * ``onedev_bin_server_run_level``: Set run level to use when installing the application to start and stop on system startup and shutdown
+
+## Execution testing
+
+For the moment, this role have only been tested on virtual-box environment  
+
+### Prepare environment
+
+- sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
+- make install-python  
+- make env  
+
+### Virtual box environment
+
+- make tests-vbox-install  
+- make tests-vbox-uninstall  
+
+## Clean up environment
+
+- make clean  
+
