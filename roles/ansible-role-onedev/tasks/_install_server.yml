@@ -32,7 +32,7 @@
     remote_src: yes
   when: not onedev_directory_exist.stat.exists
 
-- name: Load one dev configuration variables into temporary file
+- name: Load one dev configuration variables
   template:
     src: "sh_server_vars.j2"
     dest: "{{ onedev_installation_directory }}/onedev_vars"
