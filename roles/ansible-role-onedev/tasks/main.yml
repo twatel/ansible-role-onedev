@@ -1,40 +1,11 @@
+#!/usr/bin/env ansible-playbook
 ---
-- name: Ensure APT cache
-  apt: 
-    update_cache: yes
-  changed_when: false
+- name: Install one-dev baremetal server 
+  include: _install_server.yml
+  tags: 
+    - onedev_install
 
-- name: Install onedev required APT packages
-  apt: 
-    name: "{{ item }}"
-    state: present
-  loop:
-    - default-jre 
-    - default-jdk
-    - git
-
-- name: Ensure onedev-7.7.11 not already exists
-  stat:
-    path: "/tmp/onedev-7.7.11"
-  register: onedev_directory_exist
-
-- name: Unarchive a file that needs to be downloaded
-  ansible.builtin.unarchive:
-    src: https://code.onedev.io/downloads/projects/160/builds/3112/artifacts/onedev-7.7.11.zip
-    dest: /tmp
-    remote_src: yes
-  when: not onedev_directory_exist.stat.exists
-
-- name: Set /bin/server.sh variables
-  ansible.builtin.lineinfile:
-    path: /tmp/onedev-7.7.11/bin/server.sh
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-    mode: '755'
-  loop:
-    - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_bin_server_files_to_source }}"' }
-
-- name: Install & Start onedev service
-  command: ./server.sh installstart
-  args:
-    chdir: /tmp/onedev-7.7.11/bin
+- name: Uninstall one-dev baremetal server 
+  include: _uninstall_server.yml
+  tags: 
+    - onedev_uninstall

@@ -1,7 +1,19 @@
 ---
+# Onedev build
+onedev_build: "3132"
 
-# One dev files to source
-onedev_bin_server_files_to_source: ""
+# Onedev version
+onedev_version: "7.7.13"
+
+# Onedev package url
+onedev_package_url: "https://code.onedev.io/downloads/projects/160/builds/{{ onedev_build }}/artifacts/onedev-{{ onedev_version }}.zip"
+
+# Onedev destination directory
+onedev_destination_directory: "/tmp"
+
+# Onedev unarchive installation directory
+onedev_installation_directory: "{{ onedev_destination_directory }}/onedev-{{ onedev_version }}"
+
 
 # Application name and long name: If these variables are not set (or left to
 #  the default tokens), APP_NAME will default to the name of the script, then
@@ -13,20 +25,20 @@ onedev_bin_server_app_long_name: "OneDev"
 
 # If uncommented (and set to false), APP_NAME and APP_LONG_NAME will no longer 
 #  be passed to the wrapper. See documentation for details.
-onedev_bin_server_app_name_pass_to_wrapper: "false"
+onedev_bin_server_pass_to_wrapper: "true"
 
 # Wrapper path
-onedev_bin_server_wrapper_cmd: "../boot/wrapper"
+onedev_bin_server_wrapper_cmd: "{{ onedev_installation_directory }}/boot/wrapper"
 
 # Wrapper conf path
-onedev_bin_server_wrapper_conf: "../conf/wrapper.conf"
+onedev_bin_server_wrapper_conf: "{{ onedev_installation_directory }}/conf/wrapper.conf"
 
 # Priority at which to run the wrapper.  See "man nice" for valid priorities.
 #  nice is only used if a priority is specified.
 onedev_bin_server_priority: ""
 
 # Location of the pid file.
-onedev_bin_server_piddir: "."
+onedev_bin_server_piddir: "{{ onedev_installation_directory }}/bin"
 
 # PIDFILE_CHECK_PID tells the script to double check whether the pid in the pid
 #  file actually exists and belongs to this application.  When not set, only
@@ -56,7 +68,7 @@ onedev_bin_server_pidfile_check_pid: true
 # If uncommented, causes the Wrapper to be shutdown using an anchor file.
 #  When launched with the 'start' command, it will also ignore all INT and
 #  TERM signals.
-#IGNORE_SIGNALS=true
+onedev_bin_server_ignore_signals: "true"
 #
 # Wrapper will start the JVM asynchronously. Your application may have some
 #  initialization tasks and it may be desirable to wait a few seconds
@@ -67,10 +79,10 @@ onedev_bin_server_pidfile_check_pid: true
 onedev_bin_server_wait_after_startup: "0"
 
 # If set, wait for the wrapper to report that the daemon has started
-onedev_bin_server_detail_status: "true"
+onedev_bin_server_wait_for_started_status: "true"
 
-# to replace
-onedev_bin_server_pausable: "true"
+# Time to wait before sending timeout error
+onedev_bin_server_wait_for_started_timeout: "120"
 
 # If set, the status, start_msg and stop_msg commands will print out detailed
 #   state information on the Wrapper and Java processes.

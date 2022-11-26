@@ -1,0 +1,25 @@
+APP_NAME="{{ onedev_bin_server_app_name }}"
+APP_LONG_NAME="{{ onedev_bin_server_app_long_name }}"
+APP_NAME_PASS_TO_WRAPPER={{ onedev_bin_server_pass_to_wrapper }}
+#WRAPPER_CMD="{{ onedev_bin_server_wrapper_cmd }}"
+#WRAPPER_CONF="{{ onedev_bin_server_wrapper_conf }}"
+PRIORITY={{ onedev_bin_server_priority }}
+#PIDDIR="{{ onedev_bin_server_piddir }}"
+PIDFILE_CHECK_PID={{ onedev_bin_server_pidfile_check_pid }}
+IGNORE_SIGNALS={{ onedev_bin_server_ignore_signals }}
+WAIT_AFTER_STARTUP={{ onedev_bin_server_wait_after_startup }}
+WAIT_FOR_STARTED_STATUS={{ onedev_bin_server_wait_for_started_status }}
+WAIT_FOR_STARTED_TIMEOUT={{ onedev_bin_server_wait_for_started_timeout }}
+DETAIL_STATUS={{ onedev_bin_server_detail_status }}
+PAUSABLE={{ onedev_bin_server_pausable }}
+PAUSABLE_MODE={{ onedev_bin_server_pausable_mode }}
+RUN_AS_USER={{ onedev_bin_server_run_as_user }}
+SU_OPTS="{{ onedev_bin_server_su_opts }}"
+BRIEF_USAGE={{ onedev_bin_server_brief_usage }}
+SERVICE_MANAGEMENT_TOOL={{ onedev_bin_server_service_management_tool }}
+SYSTEMD_KILLMODE={{ onedev_bin_server_systemd_killmode }}
+PLIST_DOMAIN={{ onedev_bin_server_plist_domain }}
+MACOSX_KEEP_RUNNING="{{ onedev_bin_server_macosx_keep_running }}"
+RUN_LEVEL={{ onedev_bin_server_run_level }}
+
+SYSTEMD_SERVICE_FILE="/etc/systemd/system/{{ onedev_bin_server_app_name }}.service"
