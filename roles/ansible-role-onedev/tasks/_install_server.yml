@@ -5,14 +5,10 @@
     update_cache: yes
   changed_when: false
 
-- name: Install onedev required APT packages
+- name: Install required APT packages
   apt: 
-    name: "{{ item }}"
+    name: "{{ onedev_required_apt_packages }}"
     state: present
-  loop:
-    - default-jre 
-    - default-jdk
-    - git
 
 - name: Ensure onedev installation dir
   file:

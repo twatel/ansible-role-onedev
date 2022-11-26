@@ -8,6 +8,7 @@ what the role permit ?
 
 ## Variables
 
+* ``onedev_required_apt_packages``: required APT packages  
 * ``onedev_build``: build version of the onedev package  
 * ``onedev_version``: tag of the onedev package  
 * ``onedev_package_url``: url to download onedev package  
