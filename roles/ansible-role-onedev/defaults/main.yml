@@ -1,4 +1,11 @@
 ---
+# Role required apt packages
+onedev_required_apt_packages:
+  - default-jre 
+  - default-jdk
+  - git
+  - zip
+
 # Onedev build
 onedev_build: "3132"
 
@@ -13,7 +20,6 @@ onedev_destination_directory: "/tmp"
 
 # Onedev unarchive installation directory
 onedev_installation_directory: "{{ onedev_destination_directory }}/onedev-{{ onedev_version }}"
-
 
 # Application name and long name: If these variables are not set (or left to
 #  the default tokens), APP_NAME will default to the name of the script, then
