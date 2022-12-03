@@ -5,6 +5,7 @@ onedev_required_apt_packages:
   - default-jdk
   - git
   - zip
+  - curl
 
 # Onedev build
 onedev_build: "3161"
