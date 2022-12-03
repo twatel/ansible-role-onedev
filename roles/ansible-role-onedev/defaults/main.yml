@@ -7,13 +7,13 @@ onedev_required_apt_packages:
   - zip
 
 # Onedev build
-onedev_build: "3132"
+onedev_build: "3161"
 
 # Onedev version
-onedev_version: "7.7.13"
+onedev_version: "7.8.5"
 
 # Onedev package url
-onedev_package_url: "https://code.onedev.io/downloads/projects/160/builds/{{ onedev_build }}/artifacts/onedev-{{ onedev_version }}.zip"
+onedev_package_url: "https://code.onedev.io/~downloads/projects/160/builds/{{ onedev_build }}/artifacts/onedev-{{ onedev_version }}.zip"
 
 # Onedev destination directory
 onedev_destination_directory: "/tmp"
