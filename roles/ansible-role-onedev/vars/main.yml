@@ -1,0 +1,6 @@
+---
+# Application name and long name: If these variables are not set (or left to
+#  the default tokens), APP_NAME will default to the name of the script, then
+#  APP_LONG_NAME will default to the value of APP_NAME.
+__onedev_bin_server_app_name: "onedev"
+__onedev_systemd_service_file: "/etc/systemd/system/{{ __onedev_bin_server_app_name }}.service"
