@@ -1,9 +1,15 @@
 ---
+- name: Ensure onedev installation not already exists
+  stat:
+    path: "{{ onedev_installation_directory }}"
+  register: onedev_directory_exist
+
 - name: Load one dev configuration variables into temporary file
   template:
     src: "sh_server_vars.j2"
     dest: "{{ onedev_installation_directory }}/onedev_vars"
     mode: 750
+  when: onedev_directory_exist.stat.exists
 
 - name: Set server.sh variables
   ansible.builtin.lineinfile:
@@ -13,19 +19,22 @@
     mode: '755'
   loop:
     - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
+  when: onedev_directory_exist.stat.exists
 
 - name: Stop onedev service
   command: ./server.sh stop
   args:
     chdir: "{{ onedev_installation_directory }}/bin"
+  when: onedev_directory_exist.stat.exists
 
 - name: Remove onedev service
   command: ./server.sh remove
   args:
     chdir: "{{ onedev_installation_directory }}/bin"
+  when: onedev_directory_exist.stat.exists
 
 - name: Remove onedev installation directory
   file:
     path: "{{ onedev_installation_directory }}"
     state: absent
-
+  when: onedev_directory_exist.stat.exists
