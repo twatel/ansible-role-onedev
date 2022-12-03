@@ -1,0 +1,70 @@
+---
+- name: Ensure APT cache
+  apt: 
+    update_cache: yes
+  changed_when: false
+
+- name: Install required APT packages
+  apt: 
+    name: "{{ onedev_required_apt_packages }}"
+    state: present
+
+- name: Ensure onedev installation dir
+  file:
+    path: "{{ onedev_destination_directory }}"
+    state: directory
+
+- name: Ensure onedev installation not already exists
+  stat:
+    path: "{{ onedev_installation_directory }}"
+  register: onedev_directory_exist
+
+- name: Unarchive a file that needs to be downloaded
+  ansible.builtin.unarchive:
+    src: "{{ onedev_package_url }}"
+    dest: "{{ onedev_destination_directory }}"
+    creates: "{{ onedev_installation_directory }}"
+    remote_src: yes
+  when: not onedev_directory_exist.stat.exists
+
+- name: Create one dev configuration variables
+  template:
+    src: "sh_server_vars.j2"
+    dest: "{{ onedev_installation_directory }}/onedev_vars"
+    mode: 750
+  register: onedev_vars_file
+
+- name: Set server.sh variables
+  ansible.builtin.lineinfile:
+    path: "{{ onedev_installation_directory }}/bin/server.sh"
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    mode: '755'
+  loop:
+    - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
+
+# return "1" when server is not installed
+- name: Ensure server is installed
+  shell: "./server.sh status | grep -i 'not installed' | wc -l"
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+  changed_when: false
+  register: onedev_install
+
+# Install server when not already installed
+- name: Install & Start onedev service
+  command: ./server.sh installstart
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+  when: 
+    - onedev_install.stdout == '1'
+
+# Reload server already installed and configuration has changed
+- name: Reconfigure onedev service
+  command: ./server.sh condrestart
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+  when: 
+    - onedev_install.stdout == '0'
+    - onedev_vars_file is changed
+
