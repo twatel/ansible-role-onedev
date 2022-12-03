@@ -43,20 +43,21 @@ what the role permit ?
 ## Execution testing
 
 ### Prepare environment
-
-- sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
-- if [ ! "$(grep -ir "direnv hook bash" ~/.bashrc)" ]; then echo 'eval "$(direnv hook bash)"' >> ~/.bashrc; fi && direnv allow . && source ~/.bashrc
-- make install-python  
-- make env  
+```
+sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
+if [ ! "$(grep -ir "direnv hook bash" ~/.bashrc)" ]; then echo 'eval "$(direnv hook bash)"' >> ~/.bashrc; fi && direnv allow . && source ~/.bashrc
+make install-python  
+make env  
+```
 
 ### Virtual box environment
-
-- make tests-vbox-install  
-- make tests-vbox-uninstall  
-
+```
+make tests-vbox-install  
+make tests-vbox-uninstall  
+```
 ## Clean up environment
 
-- make clean  
+``make clean``  
 
 ## Display help
-- make help  
+``make help``
