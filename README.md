@@ -37,12 +37,10 @@ what the role permit ?
 * ``onedev_bin_server_run_level``: Set run level to use when installing the application to start and stop on system startup and shutdown
 
 ## Variables (vars)
-* ``__onedev_bin_server_app_name``: application name 
-* ``__onedev_systemd_service_file``: systemd service file
+* ``__onedev_bin_server_app_name``: application name  
+* ``__onedev_systemd_service_file``: systemd service file  
 
 ## Execution testing
-
-For the moment, this role have only been tested on virtual-box environment  
 
 ### Prepare environment
 
@@ -59,3 +57,5 @@ For the moment, this role have only been tested on virtual-box environment
 
 - make clean  
 
+## Display help
+- make help  
