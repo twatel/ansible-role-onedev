@@ -5,15 +5,16 @@ onedev_required_apt_packages:
   - default-jdk
   - git
   - zip
+  - curl
 
 # Onedev build
-onedev_build: "3132"
+onedev_build: "3161"
 
 # Onedev version
-onedev_version: "7.7.13"
+onedev_version: "7.8.5"
 
 # Onedev package url
-onedev_package_url: "https://code.onedev.io/downloads/projects/160/builds/{{ onedev_build }}/artifacts/onedev-{{ onedev_version }}.zip"
+onedev_package_url: "https://code.onedev.io/~downloads/projects/160/builds/{{ onedev_build }}/artifacts/onedev-{{ onedev_version }}.zip"
 
 # Onedev destination directory
 onedev_destination_directory: "/tmp"
@@ -21,13 +22,8 @@ onedev_destination_directory: "/tmp"
 # Onedev unarchive installation directory
 onedev_installation_directory: "{{ onedev_destination_directory }}/onedev-{{ onedev_version }}"
 
-# Application name and long name: If these variables are not set (or left to
-#  the default tokens), APP_NAME will default to the name of the script, then
-#  APP_LONG_NAME will default to the value of APP_NAME.
-onedev_bin_server_app_name: "onedev"
-
 # onedev_bin_server_app_long_name
-onedev_bin_server_app_long_name: "OneDev"
+onedev_bin_server_app_long_name: "OneDev42"
 
 # If uncommented (and set to false), APP_NAME and APP_LONG_NAME will no longer 
 #  be passed to the wrapper. See documentation for details.

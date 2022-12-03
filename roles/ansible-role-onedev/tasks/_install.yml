@@ -1,4 +1,3 @@
-#!/usr/bin/env ansible-playbook
 ---
 - name: Ensure APT cache
   apt: 
@@ -28,11 +27,12 @@
     remote_src: yes
   when: not onedev_directory_exist.stat.exists
 
-- name: Load one dev configuration variables
+- name: Create one dev configuration variables
   template:
     src: "sh_server_vars.j2"
     dest: "{{ onedev_installation_directory }}/onedev_vars"
     mode: 750
+  register: onedev_vars_file
 
 - name: Set server.sh variables
   ansible.builtin.lineinfile:
@@ -43,7 +43,28 @@
   loop:
     - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
 
+# return "1" when server is not installed
+- name: Ensure server is installed
+  shell: "./server.sh status | grep -i 'not installed' | wc -l"
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+  changed_when: false
+  register: onedev_install
+
+# Install server when not already installed
 - name: Install & Start onedev service
   command: ./server.sh installstart
   args:
     chdir: "{{ onedev_installation_directory }}/bin"
+  when: 
+    - onedev_install.stdout == '1'
+
+# Reload server already installed and configuration has changed
+- name: Reconfigure onedev service
+  command: ./server.sh condrestart
+  args:
+    chdir: "{{ onedev_installation_directory }}/bin"
+  when: 
+    - onedev_install.stdout == '0'
+    - onedev_vars_file is changed
+

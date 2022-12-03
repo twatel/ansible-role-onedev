@@ -1,4 +1,4 @@
-APP_NAME="{{ onedev_bin_server_app_name }}"
+APP_NAME="{{ __onedev_bin_server_app_name }}"
 APP_LONG_NAME="{{ onedev_bin_server_app_long_name }}"
 APP_NAME_PASS_TO_WRAPPER={{ onedev_bin_server_pass_to_wrapper }}
 #WRAPPER_CMD="{{ onedev_bin_server_wrapper_cmd }}"
@@ -22,4 +22,4 @@ PLIST_DOMAIN={{ onedev_bin_server_plist_domain }}
 MACOSX_KEEP_RUNNING="{{ onedev_bin_server_macosx_keep_running }}"
 RUN_LEVEL={{ onedev_bin_server_run_level }}
 
-SYSTEMD_SERVICE_FILE="/etc/systemd/system/{{ onedev_bin_server_app_name }}.service"
+SYSTEMD_SERVICE_FILE="{{ __onedev_systemd_service_file }}"

@@ -1,11 +1,10 @@
-#!/usr/bin/env ansible-playbook
 ---
 - name: Install one-dev baremetal server 
-  include: _install_server.yml
+  include: _install.yml
   tags: 
     - onedev_install
 
 - name: Uninstall one-dev baremetal server 
-  include: _uninstall_server.yml
+  include: _uninstall.yml
   tags: 
     - onedev_uninstall

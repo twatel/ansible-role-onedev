@@ -6,15 +6,14 @@ what the role permit ?
 - Install one-dev server  
 - Uninstall one-dev server  
 
-## Variables
+## Variables (defaults)
 
 * ``onedev_required_apt_packages``: required APT packages  
 * ``onedev_build``: build version of the onedev package  
 * ``onedev_version``: tag of the onedev package  
 * ``onedev_package_url``: url to download onedev package  
 * ``onedev_destination_directory``: destination where the package will be unarchive  
-* ``onedev_installation_directory``: destination of the onedev install directory (after unarchive)  
-* ``onedev_bin_server_app_name``: application name    
+* ``onedev_installation_directory``: destination of the onedev install directory (after unarchive)     
 * ``onedev_bin_server_app_long_name``: application long name
 * ``onedev_bin_server_pass_to_wrapper``: pass APPNAME & APPLONGNAME variables to the wrapper   
 * ``onedev_bin_server_wrapper_cmd``: path to the wrapper  
@@ -37,22 +36,28 @@ what the role permit ?
 * ``onedev_bin_server_macosx_keep_running``: When installing on Mac OSX platforms, this parameter controls whether the daemon is to be kept continuously running
 * ``onedev_bin_server_run_level``: Set run level to use when installing the application to start and stop on system startup and shutdown
 
+## Variables (vars)
+* ``__onedev_bin_server_app_name``: application name  
+* ``__onedev_systemd_service_file``: systemd service file  
+
 ## Execution testing
 
-For the moment, this role have only been tested on virtual-box environment  
-
 ### Prepare environment
-
-- sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
-- make install-python  
-- make env  
+```
+sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
+if [ ! "$(grep -ir "direnv hook bash" ~/.bashrc)" ]; then echo 'eval "$(direnv hook bash)"' >> ~/.bashrc; fi && direnv allow . && source ~/.bashrc
+make install-python  
+make env  
+```
 
 ### Virtual box environment
-
-- make tests-vbox-install  
-- make tests-vbox-uninstall  
-
+```
+make tests-vbox-install  
+make tests-vbox-uninstall  
+```
 ## Clean up environment
 
-- make clean  
+``make clean``  
 
+## Display help
+``make help``

@@ -1,25 +1,17 @@
 ##
-## —————————————— NOVA - system-base ——————————————————————————————————————————————
+## —————————————— ONEDEV ——————————————————————————————————————————————————————————
 ##
 SHELL=/bin/sh
 
 .PHONY: help
-help:
-	@	echo  'Preparation:'
-	@	echo  '   install-python      - Easy way to install python on a Debian system'
-	@	echo  '   reload          		- Easy way to install python on a Debian system'
-	@	echo  '   env                 - Easy way to prepare everything (venv, ssh keys, links)'
-	@	echo  'Tests:'
-	@	echo  '   tests-docker        - Easy way to test the role inside a Vagrant Docker'
-	@	echo  '   tests-virtualbox 		- Easy way to test the role inside a Vagrant VirtualBox'
-	@	echo  'Cleaning Up:'
-	@	echo  '   clean               - Easy way to clean everything, like VM, cache, venv'
+help: ## Display help
+	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | sed -e 's/Makefile://' | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-22s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
 ##
 ## —————————————— ENVIRONMENTS CONFIGURATION ——————————————————————————————————————
 ##
 .PHONY: install-python
-install-python:
+install-python: ## Easy way to install python
 	@ 	echo ""
 	@ 	echo "******************************* PYTHON INSTALL ********************************"
 	@	apt install -y python3 python3-pip python3-dev &&\
@@ -27,7 +19,7 @@ install-python:
 		echo "[${Red}FAILED${Color_Off}] ${Yellow}PYHTON${Color_Off}"
 
 .PHONY: env
-env:
+env: ## Easy way to configure which direnv can't
 	@echo "${BLUE}==> Setup local environment${COLOR_OFF}"
 	@echo "******************************** ENV REQUIREMENTS ******************************"
 
@@ -55,7 +47,7 @@ env:
 	echo "[${RED}FAILED${COLOR_OFF}] ${YELLOW}ANSIBLE-GALAXY REQUIREMENTS${COLOR_OFF}"
 
 .PHONY: header
-header:
+header: ## Display some machine kernel informations
 	@echo "******************************* ONEDEV MAKEFILE ********************************"
 	@echo "HOSTNAME	`uname -n`"
 	@echo "KERNEL RELEASE 	`uname -r`"
@@ -64,39 +56,42 @@ header:
 	@echo "********************************************************************************"
 
 ##
-## —————————————— ANSIBLE TESTS ———————————————————————————————————————————————————
+## —————————————— ANSIBLE VBOX TESTS ——————————————————————————————————————————————
 ##
 .PHONY: tests-vbox-install
-tests-vbox-install: header
-	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
-	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml --tags "onedev_install"
+tests-vbox-install: header ## Testing onedev baremetal install task on virtualbox hosts
+	@echo "${BLUE}Tests in vbox environment${COLOR_OFF}"
+	@export ANSIBLE_TAGS="onedev_install" &&\
+	cd $(TEST_VBOX_DIRECTORY) && vagrant up && vagrant provision
 
 .PHONY: tests-vbox-uninstall
-tests-vbox-uninstall: header
-	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
-	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml --tags "onedev_uninstall"
+tests-vbox-uninstall: header ## Testing onedev baremetal uninstall task on virtualbox hosts
+	@echo "${BLUE}Tests in vbox environment${COLOR_OFF}"
+	@export ANSIBLE_TAGS="onedev_uninstall" &&\
+	cd $(TEST_VBOX_DIRECTORY) && vagrant up && vagrant provision
 
 ##
 ## —————————————— CLEAN ENVIRONMENT ———————————————————————————————————————————————
 ##
 
 .PHONY: clean
-clean: header
+clean: header ## Clean environment
 	@	echo ""
 	@	echo "*********************************** CLEAN UP ***********************************"
 	@	if test -d $(TEST_DOCKER_DIRECTORY)/.vagrant; \
 			then cd $(TEST_DOCKER_DIRECTORY) && vagrant destroy -f && vagrant global-status --prune; \
 			rm -rf $(TEST_DOCKER_DIRECTORY)/.vagrant; \
 		fi
-	@ 	if test -d $(TEST_VIRTUALBOX_DIRECTORY)/.vagrant; \
-			then cd $(TEST_VIRTUALBOX_DIRECTORY) && vagrant destroy -f && vagrant global-status --prune; \
-			rm -rf $(TEST_VIRTUALBOX_DIRECTORY)/.vagrant; \
+	@ 	if test -d $(TEST_VBOX_DIRECTORY)/.vagrant; \
+			then cd $(TEST_VBOX_DIRECTORY) && vagrant destroy -f && vagrant global-status --prune; \
+			rm -rf $(TEST_VBOX_DIRECTORY)/.vagrant; \
+			rm -rf *.log;  \
 		fi
 	@ 	if test -d $(TEST_DOCKER_DIRECTORY)/secrets; \
 			then rm -rf $(TEST_DOCKER_DIRECTORY)/secrets; \
 		fi
-	@ 	if test -d $(TEST_VIRTUALBOX_DIRECTORY)/secrets; \
-			then rm -rf $(TEST_VIRTUALBOX_DIRECTORY)/secrets; \
+	@ 	if test -d $(TEST_VBOX_DIRECTORY)/secrets; \
+			then rm -rf $(TEST_VBOX_DIRECTORY)/secrets; \
 		fi
 	rm -rf .direnv
 	
