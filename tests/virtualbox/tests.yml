@@ -1,0 +1,8 @@
+#!/usr/bin/env ansible-playbook
+---
+- hosts: basenode
+  gather_facts: yes
+  become: yes
+  roles:
+    - ansible-role-onedev
+

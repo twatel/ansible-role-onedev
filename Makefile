@@ -64,17 +64,19 @@ header:
 	@echo "********************************************************************************"
 
 ##
-## —————————————— ANSIBLE TESTS ———————————————————————————————————————————————————
+## —————————————— ANSIBLE VBOX TESTS ——————————————————————————————————————————————
 ##
-.PHONY: tests-vbox-install
-tests-vbox-install: header
+.PHONY: tests-virtualbox-install
+tests-virtualbox-install: header
 	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
-	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml --tags "onedev_install"
+	@export ANSIBLE_TAGS="onedev_install" &&\
+	cd $(TEST_VIRTUALBOX_DIRECTORY) && vagrant up && vagrant provision
 
-.PHONY: tests-vbox-uninstall
-tests-vbox-uninstall: header
+.PHONY: tests-virtualbox-uninstall
+tests-virtualbox-uninstall: header
 	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
-	@cd $(TEST_VBOX_DIRECTORY) && ansible-playbook tests.yml --tags "onedev_uninstall"
+	@export ANSIBLE_TAGS="onedev_uninstall" &&\
+	cd $(TEST_VIRTUALBOX_DIRECTORY) && vagrant up && vagrant provision
 
 ##
 ## —————————————— CLEAN ENVIRONMENT ———————————————————————————————————————————————

@@ -1,9 +1,0 @@
-- name: Test onedev baremetal role execution
-  hosts: vbox
-  become: true
-  gather_facts: true
-
-  roles:
-    - ansible-role-onedev
-
-    

@@ -1,0 +1,31 @@
+machineCount = 1
+Vagrant.configure("2") do |config|
+  (1..machineCount).each do |n|
+    config.vm.define "basenode#{n}" do |define|
+      define.ssh.insert_key = false
+      config.vm.box = "debian/bullseye64"
+      define.vm.hostname = "basenode#{n}"
+      define.vm.network :private_network, ip: "192.168.56.1#{n}"
+      # if you would like to use port forwarding, uncomment the line below
+      # define.vm.network :forwarded_port, guest: 5432, host: "543#{n}"
+
+      define.vm.provider :virtualbox do |v|
+        v.cpus = 1
+        v.memory = 1024
+        v.name = "basenode#{n}"
+      end
+
+      if n == machineCount
+        define.vm.provision :ansible do |ansible|
+          ansible.limit = "all"
+          ansible.playbook = "tests.yml"
+          ansible.inventory_path = "hosts"
+          ansible.tags = "#{ENV['ANSIBLE_TAGS']}"
+          # to enable ansible playbook verbose mode, uncomment the line below
+          # ansible.raw_arguments  = ["-vvv"]
+        end
+      end
+
+    end
+  end
+end
