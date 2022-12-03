@@ -11,7 +11,7 @@ help:
 	@	echo  '   env                 - Easy way to prepare everything (venv, ssh keys, links)'
 	@	echo  'Tests:'
 	@	echo  '   tests-docker        - Easy way to test the role inside a Vagrant Docker'
-	@	echo  '   tests-virtualbox 		- Easy way to test the role inside a Vagrant VirtualBox'
+	@	echo  '   tests-vbox 		- Easy way to test the role inside a Vagrant vbox'
 	@	echo  'Cleaning Up:'
 	@	echo  '   clean               - Easy way to clean everything, like VM, cache, venv'
 
@@ -66,17 +66,17 @@ header:
 ##
 ## —————————————— ANSIBLE VBOX TESTS ——————————————————————————————————————————————
 ##
-.PHONY: tests-virtualbox-install
-tests-virtualbox-install: header
-	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
+.PHONY: tests-vbox-install
+tests-vbox-install: header
+	@echo "${BLUE}Tests in vbox environment${COLOR_OFF}"
 	@export ANSIBLE_TAGS="onedev_install" &&\
-	cd $(TEST_VIRTUALBOX_DIRECTORY) && vagrant up && vagrant provision
+	cd $(TEST_VBOX_DIRECTORY) && vagrant up && vagrant provision
 
-.PHONY: tests-virtualbox-uninstall
-tests-virtualbox-uninstall: header
-	@echo "${BLUE}Tests in VirtualBox environment${COLOR_OFF}"
+.PHONY: tests-vbox-uninstall
+tests-vbox-uninstall: header
+	@echo "${BLUE}Tests in vbox environment${COLOR_OFF}"
 	@export ANSIBLE_TAGS="onedev_uninstall" &&\
-	cd $(TEST_VIRTUALBOX_DIRECTORY) && vagrant up && vagrant provision
+	cd $(TEST_VBOX_DIRECTORY) && vagrant up && vagrant provision
 
 ##
 ## —————————————— CLEAN ENVIRONMENT ———————————————————————————————————————————————
@@ -90,15 +90,16 @@ clean: header
 			then cd $(TEST_DOCKER_DIRECTORY) && vagrant destroy -f && vagrant global-status --prune; \
 			rm -rf $(TEST_DOCKER_DIRECTORY)/.vagrant; \
 		fi
-	@ 	if test -d $(TEST_VIRTUALBOX_DIRECTORY)/.vagrant; \
-			then cd $(TEST_VIRTUALBOX_DIRECTORY) && vagrant destroy -f && vagrant global-status --prune; \
-			rm -rf $(TEST_VIRTUALBOX_DIRECTORY)/.vagrant; \
+	@ 	if test -d $(TEST_VBOX_DIRECTORY)/.vagrant; \
+			then cd $(TEST_VBOX_DIRECTORY) && vagrant destroy -f && vagrant global-status --prune; \
+			rm -rf $(TEST_VBOX_DIRECTORY)/.vagrant; \
+			rm -rf *.log;  \
 		fi
 	@ 	if test -d $(TEST_DOCKER_DIRECTORY)/secrets; \
 			then rm -rf $(TEST_DOCKER_DIRECTORY)/secrets; \
 		fi
-	@ 	if test -d $(TEST_VIRTUALBOX_DIRECTORY)/secrets; \
-			then rm -rf $(TEST_VIRTUALBOX_DIRECTORY)/secrets; \
+	@ 	if test -d $(TEST_VBOX_DIRECTORY)/secrets; \
+			then rm -rf $(TEST_VBOX_DIRECTORY)/secrets; \
 		fi
 	rm -rf .direnv
 	
