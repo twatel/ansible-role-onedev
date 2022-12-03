@@ -45,6 +45,7 @@ what the role permit ?
 ### Prepare environment
 
 - sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
+- if [ ! "$(grep -ir "direnv hook bash" ~/.bashrc)" ]; then echo 'eval "$(direnv hook bash)"' >> ~/.bashrc; fi && direnv allow . && source ~/.bashrc
 - make install-python  
 - make env  
 
