@@ -2,3 +2,5 @@
 .env.vbox
 .vagrant
 *.log
+
+/onedev-7.8.5*
