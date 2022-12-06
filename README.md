@@ -8,7 +8,16 @@ what the role permit ?
 
 ## Variables (defaults)
 
-* ``onedev_required_apt_packages``: required APT packages  
+* ``onedev_required_apt_packages``: required APT packages 
+
+* ``onedev_required_jar_modules``: list of additionnal jar modules to add  
+
+* ``onedev_db_method``: set the type of database for Onedev installation; can be "*hsqldb*" or "*mariadb*"  
+* ``onedev_db_name``: name of the database  
+* ``onedev_db_username``: username of the database  
+* ``onedev_db_password``: password of the database  
+* ``onedev_db_host``: host of the database (not required for *hsqldb* db type)  
+
 * ``onedev_build``: build version of the onedev package  
 * ``onedev_version``: tag of the onedev package  
 * ``onedev_package_url``: url to download onedev package  
@@ -42,13 +51,19 @@ what the role permit ?
 
 ## Execution testing
 
+You can find an example of database configuration in tests/virtualbox directory  
+
 ### Prepare environment
 ```
 sudo apt-get update && sudo apt-get install -y direnv make zip tar mkdir curl chmod rm  
-if [ ! "$(grep -ir "direnv hook bash" ~/.bashrc)" ]; then echo 'eval "$(direnv hook bash)"' >> ~/.bashrc; fi && direnv allow . && source ~/.bashrc
+if [ ! "$(grep -ir "direnv hook bash" ~/.bashrc)" ]; then echo 'eval "$(direnv hook bash)"' >> ~/.bashrc; fi && direnv allow . && source ~/.bashrc  
 make install-python  
 make env  
 ```
+
+/!\ You have to install virtual box to be able to execute vargant virtual box testing /!\  
+
+Vagrant docker testing will coming soon   
 
 ### Virtual box environment
 ```
