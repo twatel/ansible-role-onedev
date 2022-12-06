@@ -59,13 +59,13 @@ header: ## Display some machine kernel informations
 ## —————————————— ANSIBLE VBOX TESTS ——————————————————————————————————————————————
 ##
 .PHONY: tests-vbox-install
-tests-vbox-install: header ## Testing onedev baremetal install task on virtualbox hosts
+tests-vbox-install: header ## Testing onedev baremetal install task in virtualbox environments
 	@echo "${BLUE}Tests in vbox environment${COLOR_OFF}"
 	@export ANSIBLE_TAGS="onedev_install" &&\
 	cd $(TEST_VBOX_DIRECTORY) && vagrant up && vagrant provision
 
 .PHONY: tests-vbox-uninstall
-tests-vbox-uninstall: header ## Testing onedev baremetal uninstall task on virtualbox hosts
+tests-vbox-uninstall: header ## Testing onedev baremetal uninstall task in virtualbox environments
 	@echo "${BLUE}Tests in vbox environment${COLOR_OFF}"
 	@export ANSIBLE_TAGS="onedev_uninstall" &&\
 	cd $(TEST_VBOX_DIRECTORY) && vagrant up && vagrant provision
@@ -93,5 +93,3 @@ clean: header ## Clean environment
 	@ 	if test -d $(TEST_VBOX_DIRECTORY)/secrets; \
 			then rm -rf $(TEST_VBOX_DIRECTORY)/secrets; \
 		fi
-	rm -rf .direnv
-	

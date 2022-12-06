@@ -9,25 +9,25 @@
     name: "{{ onedev_required_apt_packages }}"
     state: present
 
-- name: Ensure onedev installation dir
+- name: Ensure One-dev installation dir
   file:
     path: "{{ onedev_destination_directory }}"
     state: directory
 
-- name: Ensure onedev installation not already exists
+- name: Ensure One-dev installation exists
   stat:
     path: "{{ onedev_installation_directory }}"
-  register: onedev_directory_exist
+  register: onedev_directory
 
-- name: Unarchive a file that needs to be downloaded
+- name: Unarchive One-dev application archive
   ansible.builtin.unarchive:
     src: "{{ onedev_package_url }}"
     dest: "{{ onedev_destination_directory }}"
     creates: "{{ onedev_installation_directory }}"
     remote_src: yes
-  when: not onedev_directory_exist.stat.exists
+  when: not onedev_directory.stat.exists
 
-- name: Create one dev configuration variables
+- name: Create One-dev configuration variables
   template:
     src: "sh_server_vars.j2"
     dest: "{{ onedev_installation_directory }}/onedev_vars"
@@ -43,28 +43,43 @@
   loop:
     - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
 
+- name: Set database configuration
+  template:
+    src: hibernate.properties.j2
+    dest: "{{ onedev_installation_directory }}/conf/hibernate.properties"
+
+- name: Download .jar modules
+  ansible.builtin.get_url:
+    url: "{{ item }}"
+    dest: "{{ onedev_installation_directory }}/site/lib/"
+    mode: '0750'
+  loop: "{{ onedev_required_jar_modules }}"
+  when:
+    - onedev_required_jar_modules is defined
+    - (onedev_required_jar_modules | length) > 0
+
 # return "1" when server is not installed
 - name: Ensure server is installed
   shell: "./server.sh status | grep -i 'not installed' | wc -l"
   args:
     chdir: "{{ onedev_installation_directory }}/bin"
   changed_when: false
-  register: onedev_install
+  register: onedev_is_installed
 
 # Install server when not already installed
-- name: Install & Start onedev service
+- name: Install & Start One-dev service
   command: ./server.sh installstart
   args:
     chdir: "{{ onedev_installation_directory }}/bin"
   when: 
-    - onedev_install.stdout == '1'
+    - onedev_is_installed.stdout == '1'
 
 # Reload server already installed and configuration has changed
-- name: Reconfigure onedev service
+- name: Reconfigure One-dev service
   command: ./server.sh condrestart
   args:
     chdir: "{{ onedev_installation_directory }}/bin"
   when: 
-    - onedev_install.stdout == '0'
+    - onedev_is_installed.stdout == '0'
     - onedev_vars_file is changed
 

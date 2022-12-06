@@ -1,0 +1,8 @@
+---
+# Onedev part
+onedev_destination_directory: "/opt"
+
+onedev_db_method: "hsqldb"
+onedev_db_name: "db42"
+onedev_db_username: "user42"
+onedev_db_password: "password42"
