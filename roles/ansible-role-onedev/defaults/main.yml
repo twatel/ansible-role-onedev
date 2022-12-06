@@ -1,11 +1,29 @@
 ---
-# Role required apt packages
+# Required apt packages
 onedev_required_apt_packages:
   - default-jre 
   - default-jdk
   - git
   - zip
   - curl
+
+# One-dev required jar modules
+onedev_required_jar_modules: []
+
+# Database type (hsqldb or mariadb)
+onedev_db_method: "hsqldb"
+
+# Name of the database
+onedev_db_name: "db42"
+
+# User of the database
+onedev_db_username: "user42"
+
+# Password of the database
+onedev_db_password: "password42"
+
+# Host where is located the db
+onedev_db_host: "localhost" # not required for hsqldb method
 
 # Onedev build
 onedev_build: "3161"
@@ -173,3 +191,4 @@ onedev_bin_server_macosx_keep_running: "false"
 #   2) RUN_LEVEL_S or RUN_LEVEL_K, to specify specify start or stop run levels.
 #   3) RUN_LEVEL, to specify a general run level.
 onedev_bin_server_run_level: "20"
+

@@ -1,0 +1,28 @@
+---
+# Mariadb part
+mariadb_bind_address: "0.0.0.0"
+
+mariadb_databases: 
+  - name: db42
+    collation: utf8_general_ci
+    encoding: utf8
+    replicate: false
+
+mariadb_users: 
+  - name: user42
+    host: '%'
+    password: password42
+    priv: "*.*:GRANT/db42.*:ALL"
+    state: present
+
+# Onedev part
+onedev_destination_directory: "/opt"
+onedev_required_jar_modules: 
+  - https://dlm.mariadb.com/2678616/Connectors/java/connector-java-3.1.0/mariadb-java-client-3.1.0.jar
+
+onedev_db_method: "mariadb"
+onedev_db_name: "db42"
+onedev_db_username: "user42"
+onedev_db_password: "password42"
+onedev_db_host: "localhost"
+
