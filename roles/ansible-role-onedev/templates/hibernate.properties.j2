@@ -1,0 +1,33 @@
+{% if onedev_db_method == 'hsqldb' %}
+
+hibernate.dialect=org.hibernate.dialect.HSQLDialect
+hibernate.connection.driver_class=org.hsqldb.jdbc.JDBCDriver
+hibernate.connection.url=jdbc:hsqldb:file:${installDir}/sampledb/{{ onedev_db_name }};hsqldb.tx=mvcc;hsqldb.lob_compressed=true;sql.ignore_case=true;shutdown=true
+hibernate.connection.username={{ onedev_db_username }}
+hibernate.connection.password={{ onedev_db_password }}
+
+{% elif onedev_db_method == 'mariadb' %}
+
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+hibernate.connection.driver_class=org.mariadb.jdbc.Driver
+hibernate.connection.url=jdbc:mariadb://{{ onedev_db_host }}:3306/{{ onedev_db_name }}
+hibernate.connection.username={{ onedev_db_username }}
+hibernate.connection.password={{ onedev_db_password }}
+
+{% endif %}
+
+hibernate.connection.provider_class=org.hibernate.hikaricp.internal.HikariCPConnectionProvider
+
+hibernate.hikari.transactionIsolation=TRANSACTION_READ_COMMITTED
+hibernate.hikari.autoCommit=true
+hibernate.hikari.maximumPoolSize=25
+
+hibernate.show_sql=false
+hibernate.format_sql=true
+
+javax.persistence.validation.mode=none
+hibernate.validator.apply_to_ddl=false
+
+hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastLocalCacheRegionFactory
+hibernate.cache.use_query_cache=true
+hibernate.cache.auto_evict_collection_cache=true

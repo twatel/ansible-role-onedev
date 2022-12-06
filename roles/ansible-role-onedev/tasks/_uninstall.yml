@@ -1,40 +1,58 @@
 ---
-- name: Ensure onedev installation not already exists
+- name: Ensure project exists
   stat:
     path: "{{ onedev_installation_directory }}"
-  register: onedev_directory_exist
+  register: onedev_directory
 
-- name: Load one dev configuration variables into temporary file
-  template:
-    src: "sh_server_vars.j2"
-    dest: "{{ onedev_installation_directory }}/onedev_vars"
-    mode: 750
-  when: onedev_directory_exist.stat.exists
+- block:
+  # return "0" when server is installed
+  - name: Ensure server is installed
+    shell: "./server.sh status | grep -i 'not installed' | wc -l"
+    args:
+      chdir: "{{ onedev_installation_directory }}/bin"
+    changed_when: false
+    register: onedev_is_installed
 
-- name: Set server.sh variables
-  ansible.builtin.lineinfile:
-    path: "{{ onedev_installation_directory }}/bin/server.sh"
-    regexp: '{{ item.regexp }}'
-    line: '{{ item.line }}'
-    mode: '755'
-  loop:
-    - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
-  when: onedev_directory_exist.stat.exists
+  # return "0" when server is running
+  - name: Ensure server is running
+    shell: "./server.sh status | grep -i 'not running' | wc -l"
+    args:
+      chdir: "{{ onedev_installation_directory }}/bin"
+    changed_when: false
+    register: onedev_is_running
 
-- name: Stop onedev service
-  command: ./server.sh stop
-  args:
-    chdir: "{{ onedev_installation_directory }}/bin"
-  when: onedev_directory_exist.stat.exists
+  - name: Load One-dev configuration variables into temporary file
+    template:
+      src: "sh_server_vars.j2"
+      dest: "{{ onedev_installation_directory }}/onedev_vars"
+      mode: 750
 
-- name: Remove onedev service
-  command: ./server.sh remove
-  args:
-    chdir: "{{ onedev_installation_directory }}/bin"
-  when: onedev_directory_exist.stat.exists
+  - name: Set server.sh variables
+    ansible.builtin.lineinfile:
+      path: "{{ onedev_installation_directory }}/bin/server.sh"
+      regexp: '{{ item.regexp }}'
+      line: '{{ item.line }}'
+      mode: '755'
+    loop:
+      - { regexp: '^FILES_TO_SOURCE=', line: 'FILES_TO_SOURCE="{{ onedev_installation_directory }}/onedev_vars"' }
 
-- name: Remove onedev installation directory
-  file:
-    path: "{{ onedev_installation_directory }}"
-    state: absent
-  when: onedev_directory_exist.stat.exists
+  - name: Stop One-dev service
+    command: ./server.sh stop
+    args:
+      chdir: "{{ onedev_installation_directory }}/bin"
+    when:
+      - onedev_is_installed.stdout == '0' 
+      - onedev_is_running.stdout == '0'
+
+  - name: Remove One-dev service
+    command: ./server.sh remove
+    args:
+      chdir: "{{ onedev_installation_directory }}/bin"
+    when: onedev_is_installed.stdout == '0'
+
+  - name: Remove One-dev installation directory
+    file:
+      path: "{{ onedev_installation_directory }}"
+      state: absent
+    
+  when: onedev_directory.stat.exists

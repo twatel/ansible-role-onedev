@@ -1,4 +1,4 @@
-machineCount = 1
+machineCount = 2
 Vagrant.configure("2") do |config|
   (1..machineCount).each do |n|
     config.vm.define "basenode#{n}" do |define|
